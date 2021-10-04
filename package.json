@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node server-index",
-    "dev": "nodemon server-index"
+    "server": "nodemon server-index",
+    "client": "cd client && npm start",
+    "develop": "concurrently \"npm run server\" \"npm run client\""
+
   },
   "repository": {
     "type": "git",
