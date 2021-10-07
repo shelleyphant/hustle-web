@@ -7,6 +7,9 @@ const { v4: uuidv4 } = require('uuid')
 
 const db = require('../connection')
 
+// Load User model
+const User = require('../models/User');
+
 router.use(cors())
 router.use(express.json())
 router.use(express.urlencoded({
@@ -32,6 +35,17 @@ const users = () => {
 // router.use(passport.initialize())
 // router.use(passport.session())
 
+
+router.get('/login', (req, res) => {
+    // res.render('login.ejs')
+    console.log('pulls')
+})
+
+router.post('/login', (req, res) => {
+    console.log('submits')
+})
+
+
 // router.get('/login', checkNotAuthenticated, (req, res) => {
 //     res.render('login.ejs')
 // })
@@ -43,9 +57,7 @@ const users = () => {
 // }))
 
 router.get('/register', (req, res) => {
-    // res.render('register.ejs')
     res.send({message: true})
-    // console.log('can sign up')
 })
 
 router.post('/register', async (req, res) => {
