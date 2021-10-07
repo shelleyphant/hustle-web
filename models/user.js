@@ -8,7 +8,8 @@ const User = db.sequelize.define('user', {
         primaryKey: true
     },
     username: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
     },
     password: {
         type: Sequelize.STRING
@@ -46,8 +47,8 @@ const User = db.sequelize.define('user', {
     }
 })
   
-User.sync().then(() => {
-    // console.log('table created');
-})
+// User.sync({alter: true}).then(() => {
+//     // console.log('table created');
+// })
 
 module.exports = User;

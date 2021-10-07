@@ -3,8 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const cors = require('cors')
-// const { v4: uuidv4 } = require('uuid')
-
+const session = require('express-session')
 const db = require('../connection')
 
 // Load User model
@@ -15,52 +14,35 @@ router.use(express.json())
 router.use(express.urlencoded({
   extended: true
 }))
+router.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
 
 const localConfig = require('../passports/passport-config-local')
-// passport.use(localConfig)
 localConfig(
     passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
+    username => User.findAll({where: { username: username }}), //getUserByUN()
+    id => User.findByPk(user => user.uid === uid)  //getUserById()
 )
 
-const users = () => {
-    db.query(`SELECT * FROM users`, (err, result) => {
-        if (err) throw err
-        console.log(result)
-    })
-}
-// users()
+router.use(passport.initialize())
+router.use(passport.session())
 
-// router.use(passport.initialize())
-// router.use(passport.session())
-
-
-router.get('/login', (req, res) => {
-    // res.render('login.ejs')
-    console.log('pulls')
+router.get('/login', checkNotAuthenticated, (req, res) => {
+    res.send({redirect: '/'})
 })
 
-router.post('/login', (req, res) => {
-    console.log('submits')
+router.post('/login', checkNotAuthenticated, passport.authenticate('local'),(req, res) => {
+    res.send({redirect: '/'})
 })
 
-
-// router.get('/login', checkNotAuthenticated, (req, res) => {
-//     res.render('login.ejs')
-// })
-
-// router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-//     successRedirect: '/',
-//     failureRedirect: '/login',
-//     failureFlash: true
-// }))
-
-router.get('/register', (req, res) => {
-    res.send({message: true})
+router.get('/register', checkNotAuthenticated, (req, res) => {
+    res.send({redirect: '/'})
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
@@ -72,6 +54,7 @@ router.post('/register', async (req, res) => {
     } catch(err) {
         console.log(err)
     }
+    res.send({redirect: '/'})
 })
 
 // router.delete('/logout', (req, res) => {
@@ -79,18 +62,20 @@ router.post('/register', async (req, res) => {
 //     res.redirect('/login')
 // })
 
-// function checkAuthenticated(req, res, next) {
-//     if (req.isAuthenticated()) {
-//         return next()
-//     }
-//     // res.redirect('/login')
-// }
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.send({redirect: '/login'})
+    // res.redirect('/login')
+}
 
-// function checkNotAuthenticated(req, res, next) {
-//     if (req.isAuthenticated()) {
-//         // return res.redirect('/')
-//     }
-//     next()
-// }
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        // return res.redirect('/')
+        res.send({redirect: '/'})
+    }
+    next()
+}
 
 module.exports = router;

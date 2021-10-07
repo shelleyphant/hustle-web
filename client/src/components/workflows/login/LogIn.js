@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import TextInput from '../../UI/TextInput'
 import Button from '../../UI/Button'
 import * as Icon from '@tabler/icons'
@@ -6,27 +7,46 @@ import * as Icon from '@tabler/icons'
 
 const LogIn = () => {
 
+    const [direct, setDirect] = useState({
+        redirect: false,
+        url: ''
+    })
     const [ user, setUser ] = useState({
         username: '',
         password: ''
     })
 
-    const inputHandler = (e) =>{
-        setUser( {...user, [e.target.name]: e.target.value} )
+    const canLogIn = async () => {
+        const response = await fetch('http://localhost:5000/auth/login', {
+            method: 'GET',
+        })
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json()
+        console.log(data.redirect)
+        setDirect({redirect: true, url: data.redirect})
     }
+
+    useEffect(canLogIn)
+    if(direct.redirect){ return <Redirect to={direct.url} /> }
 
     const logIn = async (e) => {
         e.preventDefault()
-        console.log(user)
-        await fetch('http://localhost:5000/auth/login', {
+        const response = await fetch('http://localhost:5000/auth/login', {
             method: 'POST',
             body: JSON.stringify(user),
             headers: {
                 'Content-type': 'application/json',
             }
         })
+        const data = await response.json()
+        setDirect({redirect: true, url: data.redirect})
     }
 
+    const inputHandler = (e) =>{
+        setUser( {...user, [e.target.name]: e.target.value} )
+    }
 
     return (
         <>
