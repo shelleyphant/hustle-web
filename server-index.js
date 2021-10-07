@@ -4,26 +4,18 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const app = express()
-const mysql = require('mysql')
-const passport = require('passport')
+// const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
+const cors = require('cors')
 
 const port = process.env.PORT || 5000
 const db = require('./connection')
 
-const initializePassport = require('./passports/passport-config-local')
-initializePassport(
-    passport,
-    email => users.find(user => user.email === email),
-    id => users.find(user => user.id === id)
-)
+app.use('/auth', require('./routes/auth'))
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
+app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
@@ -31,8 +23,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-app.use(passport.initialize())
-app.use(passport.session())
+
 app.use(methodOverride('_method'))
 
 db.connection((error) => {

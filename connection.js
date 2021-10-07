@@ -14,3 +14,11 @@ exports.connection = (done) => {
     })
     done()
 }
+
+exports.query = (sql, done) => {
+    pass.query(sql, (err, res) => {
+        if(err) console.log(err)
+        console.log(res)
+    })
+    done()
+}
