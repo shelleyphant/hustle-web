@@ -1,21 +1,25 @@
 const { Sequelize } = require('sequelize')
 
-const sequelize = new Sequelize('HustleDB', 'root', 'root', 
+const method = new Sequelize('HustleDB', 'root', 'root', 
     {
         host: 'localhost',
         port: 8889,
         dialect: 'mysql'
     }
 )
+exports.sequelize = method
+// module.exports = sequelize
 
 exports.connection = async (done) => {
     try {
-        await sequelize.authenticate()
+        await method.authenticate()
     } catch (error) {
         console.error(error)
     }
     done()
 }
+
+
 
 
 

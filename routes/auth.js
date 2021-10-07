@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const cors = require('cors')
-const { v4: uuidv4 } = require('uuid')
+// const { v4: uuidv4 } = require('uuid')
 
 const db = require('../connection')
 
@@ -62,21 +62,13 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
     try {
-        const uuid = uuidv4()
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
-        var username = req.body.username
-        var email = req.body.email
-        var password = hashedPassword
-        var id = uuid
- 
-        var sql = `INSERT INTO users (username, email, password, uid) VALUES ("${username}", "${email}", "${password}", "${id}")`;
-        db.query(sql, (err, results) => {
-            if (err) throw err
-        })
-        console.log('added user')
-        res.send({message: 'added user!'})
-        // res.redirect('/login')
+        User.create({
+            username: req.body.username,
+            email: req.body.email,
+            password: hashedPassword
+        }, { fields: ['username', 'email', 'password'] })
     } catch(err) {
         console.log(err)
     }
