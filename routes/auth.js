@@ -30,16 +30,20 @@ localConfig(
 router.use(passport.initialize())
 router.use(passport.session())
 
+router.get('/', checkAuthenticated, (req, res) => {
+    res.send({auth:true})
+})
+
 router.get('/login', checkNotAuthenticated, (req, res) => {
-    res.send({redirect: '/'})
+    res.send({auth: false, redirect: ''})
 })
 
 router.post('/login', checkNotAuthenticated, passport.authenticate('local'),(req, res) => {
-    res.send({redirect: '/'})
+    res.send({auth: true, redirect: '/'})
 })
 
 router.get('/register', checkNotAuthenticated, (req, res) => {
-    res.send({redirect: '/'})
+    res.send({auth: false, redirect: ''})
 })
 
 router.post('/register', checkNotAuthenticated, async (req, res) => {
@@ -51,6 +55,8 @@ router.post('/register', checkNotAuthenticated, async (req, res) => {
             email: req.body.email,
             password: hashedPassword
         }, { fields: ['username', 'email', 'password'] })
+
+
     } catch(err) {
         console.log(err)
     }
@@ -66,14 +72,14 @@ function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
     }
-    res.send({redirect: '/login'})
+    res.send({auth: false, redirect: '/login'})
     // res.redirect('/login')
 }
 
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         // return res.redirect('/')
-        res.send({redirect: '/'})
+        res.send({auth: true, redirect: '/'})
     }
     next()
 }
