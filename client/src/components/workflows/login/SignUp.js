@@ -7,8 +7,8 @@ import * as Icon from '@tabler/icons'
 
 const SignUp = () => {
 
-    const [direct, setDirect] = useState({
-        redirect: false,
+    const [auth, setAuth] = useState({
+        auth: false,
         url: ''
     })
     const [ user, setUser ] = useState({
@@ -20,16 +20,17 @@ const SignUp = () => {
     const checkAuth = async () => {
         const response = await fetch('http://localhost:5000/auth/register', {
             method: 'GET',
+            credentials: 'include'
         })
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json()
-        setDirect({redirect: true, url: data.redirect})
+        setAuth({auth: data.auth, url: data.redirect})
     }
 
-    useEffect(checkAuth)
-    if(direct.redirect){ return <Redirect to={direct.url} /> }
+    useEffect(() => {checkAuth()}, [])
+    if(auth.auth){ return <Redirect to={auth.url} /> }
 
     const addUser = async (e) => {
         e.preventDefault()
@@ -41,7 +42,7 @@ const SignUp = () => {
             }
         })
         const data = await response.json()
-        setDirect({redirect: true, url: data.redirect})
+        setAuth({auth: data.auth, url: data.redirect})
     }
 
     const inputHandler = (e) =>{

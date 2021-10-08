@@ -4,6 +4,20 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express')
 const app = express()
+const cors = require('cors')
+
+// app.use((req, res, next) => {
+//     res.append('Access-Control-Allow-Origin', ['*']);
+//     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//     res.append('Access-Control-Allow-Headers', 'Content-Type');
+//     next()
+// })
+app.use(cors(
+    {
+        origin: 'http://localhost:3000',
+        credentials: true
+    }
+))
 
 const port = process.env.PORT || 5000
 const db = require('./connection')
@@ -20,25 +34,3 @@ db.connection((error) => {
 })
 
 app.use('/auth', require('./routes/auth'))
-
-
-
-// const passport = require('passport')
-// const flash = require('express-flash')
-// const session = require('express-session')
-// const methodOverride = require('method-override')
-// const cors = require('cors')
-
-// app.use(cors())
-// app.use(express.urlencoded({ extended: false }))
-// app.use(flash())
-// app.use(session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false
-// }))
-
-// app.use(methodOverride('_method'))
-
-
-

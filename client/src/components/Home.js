@@ -3,22 +3,22 @@ import { Link, Redirect } from 'react-router-dom'
 
 const Home = () => {
 
-    const [direct, setDirect] = useState({
-        redirect: false,
-        url: ''
+    const [auth, setAuth] = useState({
+        auth: false
     })
     const checkAuth = async () => {
-        const response = await fetch('http://localhost:5000/auth/register', {
+        const response = await fetch('http://localhost:5000/auth', {
             method: 'GET',
+            credentials: 'include'
         })
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json()
-        setDirect({redirect: true, url: data.redirect})
+        setAuth({auth: data.auth})
     }
 
-    useEffect(checkAuth)
+    useEffect(() => {checkAuth()}, [])
     // if(direct.redirect){ return <Redirect to={direct.url} /> }
 
     return (

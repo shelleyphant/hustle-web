@@ -7,8 +7,8 @@ import * as Icon from '@tabler/icons'
 
 const LogIn = () => {
 
-    const [direct, setDirect] = useState({
-        redirect: false,
+    const [auth, setAuth] = useState({
+        auth: false,
         url: ''
     })
     const [ user, setUser ] = useState({
@@ -19,17 +19,18 @@ const LogIn = () => {
     const checkAuth = async () => {
         const response = await fetch('http://localhost:5000/auth/login', {
             method: 'GET',
+            credentials: 'include'
         })
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json()
-        console.log(data.redirect)
-        setDirect({redirect: true, url: data.redirect})
+        console.log(data.auth)
+        setAuth({auth: data.auth, url: data.redirect})
     }
 
-    useEffect(checkAuth)
-    if(direct.redirect){ return <Redirect to={direct.url} /> }
+    useEffect(() => {checkAuth()}, [])
+    if(auth.auth){ return <Redirect to={auth.url} /> }else{}
 
     const logIn = async (e) => {
         e.preventDefault()
@@ -38,10 +39,11 @@ const LogIn = () => {
             body: JSON.stringify(user),
             headers: {
                 'Content-type': 'application/json',
-            }
+            },
+            credentials: 'include'
         })
         const data = await response.json()
-        setDirect({redirect: true, url: data.redirect})
+        setAuth({auth: data.auth, url: data.redirect})
     }
 
     const inputHandler = (e) =>{

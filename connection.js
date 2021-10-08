@@ -8,7 +8,6 @@ const method = new Sequelize('HustleDB', 'root', 'root',
     }
 )
 exports.sequelize = method
-// module.exports = sequelize
 
 exports.connection = async (done) => {
     try {
