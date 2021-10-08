@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import LogIn from '../src/components/workflows/login/LogIn'
 import SignUp from '../src/components/workflows/login/SignUp'
+import Home from '../src/components/Home'
+
 
 import './App.css'
 
@@ -20,7 +22,3 @@ const App = () => {
 }
 
 export default App
-
-export const Home = () => {
-    return <h1>Homepage</h1>
-}

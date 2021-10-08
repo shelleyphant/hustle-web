@@ -16,7 +16,7 @@ const LogIn = () => {
         password: ''
     })
 
-    const canLogIn = async () => {
+    const checkAuth = async () => {
         const response = await fetch('http://localhost:5000/auth/login', {
             method: 'GET',
         })
@@ -28,7 +28,7 @@ const LogIn = () => {
         setDirect({redirect: true, url: data.redirect})
     }
 
-    useEffect(canLogIn)
+    useEffect(checkAuth)
     if(direct.redirect){ return <Redirect to={direct.url} /> }
 
     const logIn = async (e) => {

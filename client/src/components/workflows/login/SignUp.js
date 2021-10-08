@@ -17,7 +17,7 @@ const SignUp = () => {
         password: ''
     })
 
-    const canRegister = async () => {
+    const checkAuth = async () => {
         const response = await fetch('http://localhost:5000/auth/register', {
             method: 'GET',
         })
@@ -28,7 +28,7 @@ const SignUp = () => {
         setDirect({redirect: true, url: data.redirect})
     }
 
-    useEffect(canRegister)
+    useEffect(checkAuth)
     if(direct.redirect){ return <Redirect to={direct.url} /> }
 
     const addUser = async (e) => {
