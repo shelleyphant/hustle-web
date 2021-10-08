@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 
+import { Navigation } from './Navigation'
+
 const Home = () => {
 
     const [auth, setAuth] = useState({
@@ -22,9 +24,10 @@ const Home = () => {
     // if(direct.redirect){ return <Redirect to={direct.url} /> }
 
     return (
-        <div>
+        <>
+            <Navigation />
             <h1>Homepage</h1>
-        </div>
+        </>
     )
 }
 

@@ -39,7 +39,8 @@ const SignUp = () => {
             body: JSON.stringify(user),
             headers: {
                 'Content-type': 'application/json',
-            }
+            },
+            credentials: 'include'
         })
         const data = await response.json()
         setAuth({auth: data.auth, url: data.redirect})

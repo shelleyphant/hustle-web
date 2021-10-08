@@ -1,0 +1,22 @@
+.navigation {
+    width: 100%;
+    background-color: white;
+    border-bottom: 1px solid #dddddd;
+    position: fixed;
+    height: 60px;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+    ul {
+        list-style: none;
+
+        li {
+            display: inline-block;
+            
+            a {
+                color: #060666;
+            }
+        }
+    }
+}
