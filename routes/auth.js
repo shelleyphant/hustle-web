@@ -65,19 +65,15 @@ router.delete('/logout', (req, res) => {
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        console.log('authorised')
         return next()
     }
-    console.log('not authorised')
     res.send({auth: false, redirect: '/login'})
 }
 
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        console.log('authorised')
         res.send({auth: true, redirect: '/'})
     }
-    console.log('not authorised')
     next()
 }
 

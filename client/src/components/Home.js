@@ -1,32 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
-import { Navigation } from './Navigation'
+import { Hot } from './workflows/feeds/Hot'
+import { Live } from './workflows/feeds/Live'
+import { Main } from './workflows/feeds/Main'
 
 const Home = () => {
 
-    const [auth, setAuth] = useState({
-        auth: false
-    })
-    const checkAuth = async () => {
-        const response = await fetch('http://localhost:5000/auth', {
-            method: 'GET',
-            credentials: 'include'
-        })
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json()
-        setAuth({auth: data.auth})
-    }
-
-    useEffect(() => {checkAuth()}, [])
-    // if(direct.redirect){ return <Redirect to={direct.url} /> }
-
     return (
         <>
-            <Navigation />
-            <h1>Homepage</h1>
+            <Switch>
+                <Route path='/live' exact component={Live} />
+                <Route path='/hot' exact component={Hot}/>
+                <Route path='/' exact component={Main} />
+            </Switch>
         </>
     )
 }

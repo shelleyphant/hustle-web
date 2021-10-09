@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import * as Icon from '@tabler/icons'
-import { Link } from 'react-router-dom'
+import { Link, useRouteMatch } from 'react-router-dom'
 
 import './styles/navigation.scss'
 
@@ -24,14 +24,52 @@ export const Navigation = () => {
 
     return (
         <div className='navigation'>
-            <ul>
-                <li><Link to='/' ><Icon.IconHome /></Link></li>
-                <li><Link to='/' ><Icon.IconSearch /></Link></li>
-                <li><Link to='/' ><Icon.IconMail /></Link></li>
-                <li><Link to='/' ><Icon.IconBell /></Link></li>
-                <li><Link to='/' ><Icon.IconChevronDown /></Link></li>
-            </ul>
-            
+            <div className='nav-wrapper'>
+
+                {/* LOGO */}
+                <div className='nav-logo'></div>
+
+                <ul className='feed-links'>
+                    <StyledFeedLink to='/live' onExact label='Live' />
+                    <StyledFeedLink to='/' onExact label='Home' />
+                    <StyledFeedLink to='/hot' onExact label='Hot' />
+                </ul>
+
+                {/* SEARCH BOX */}
+
+                {auth.auth ? <UserNav /> : <StrangerNav />}
+            </div>
         </div>
+    )
+}
+
+const StyledFeedLink = ({ label, to, onExact }) => {
+    let match = useRouteMatch({
+      path: to,
+      exact: onExact
+    })
+    return (
+      <li className={match ? "active" : ""}>
+        <Link to={to}>{label}</Link>
+      </li>
+    )
+  }
+
+const UserNav = () => {
+    return (
+        <ul className='user-links'>
+            <li><Link to='/' ><Icon.IconMessages /></Link></li>
+            <li><Link to='/' >Trending</Link></li>
+            <li><Link to='/' >Username <Icon.IconChevronDown /></Link></li>
+        </ul>
+    )
+}
+
+const StrangerNav = () => {
+    return (
+        <ul className='user-links'>
+            <li><Link to='/register' className='button alt'><Icon.IconUserPlus /> Sign Up</Link></li>
+            <li><Link to='/login' className='button main'><Icon.IconLogin /> Log In</Link></li>
+        </ul>
     )
 }

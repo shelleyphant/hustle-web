@@ -7,16 +7,62 @@
     top: 0;
     left: 0;
     z-index: 2;
+    font-family: 'Typori-Regular';
+    text-transform: uppercase;
+
+    .nav-wrapper {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        max-width: 1200px;
+        height: 100%;
+    }
+
+    .nav-logo {
+        border: solid #C3494E;
+        border-radius: 12px; //TO-DO: convert to em
+        height: 32px;
+        width: 32px;
+        display: inline-block;
+    }
 
     ul {
         list-style: none;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        height: 100%;
 
         li {
             display: inline-block;
+            height: 100%;
             
             a {
                 color: #060666;
+                text-decoration: none;
+                height: 100%;
+                line-height: 60px;
             }
         }
+    }
+
+    .feed-links {
+        display: flex;
+        justify-content: space-between;
+        flex-basis: 30%;
+
+        li {
+            &.active {
+                border-bottom: 2px solid #C3494E;
+            }
+
+            a {
+                
+            }
+        }
+
+    }
+    .user-links {
+
     }
 }
